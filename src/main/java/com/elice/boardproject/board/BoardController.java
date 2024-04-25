@@ -21,7 +21,7 @@ public class BoardController {
         ModelAndView Mav = new ModelAndView("board/boards");
         Mav.addObject("boards", boards);
         return Mav;
-
+포ㅗㅗㅗㅗㅎ롷ㅗㅎㅗ
     }
 
     @RequestMapping(value = "/boards/create")
