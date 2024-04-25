@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Comment {
     @Id
-    private int id;
+    private Long id;
     private String content;
     private String name;
 

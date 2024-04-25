@@ -1,5 +1,6 @@
 package com.elice.boardproject.post.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -10,8 +11,10 @@ import lombok.Data;
 @Data
 public class Post {
     @Id
-    private int id;
+    private Long id;
     private String title;
+
+    @Column(length = 10000)
     private String content;
 
 }
