@@ -22,7 +22,7 @@ public class BoardController {
         Mav.addObject("boards", boards);
         return Mav;
 
-    }ddddddd
+    }
 
     @RequestMapping(value = "/boards/create")
     public ModelAndView second() {
