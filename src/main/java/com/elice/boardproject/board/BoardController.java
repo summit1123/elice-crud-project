@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
-@RequiredArgsConstructor
-public class BoardController {
+
 //    @RequestMapping(value = "/")
 //    public ModelAndView first() {
 //       List<Board> boards = new ArrayList<>();
@@ -27,6 +25,9 @@ public class BoardController {
 //        Mav.addObject("boards", boards);
 //        return Mav;
 
+    @Controller
+    @RequiredArgsConstructor
+    public class BoardController {
     private final BoardRepository boardRepository;
 
 
