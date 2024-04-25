@@ -13,5 +13,5 @@ public class Board {
     private int id;
     private String name;
     private String description;
-    //db setting clear
+    //db setting clearssss
 }
