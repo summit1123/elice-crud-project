@@ -6,7 +6,6 @@ import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.BoardRepository;
 import com.elice.boardproject.repository.PostRepository;
 import com.elice.boardproject.repository.UserRepository;
-import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,7 +45,7 @@ public class BoardController {
     @PostMapping("/boards/create")
     public String create(@RequestParam("name") String name, @RequestParam("description") String description) {
 
-        // user_id가 1인 사용자 조회, 임시로
+        // user 1만 가져오깅.
         User user = userRepository.findById(1).orElseThrow();
 
         Date date = new Date(System.currentTimeMillis());
