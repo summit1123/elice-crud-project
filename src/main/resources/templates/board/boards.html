@@ -67,7 +67,7 @@
             >
               <a
                 class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
-                th:href="@{/boards/{boardId}(boardId=${board.id})}"
+                th:href="@{/boards/{boardId}(boardId=${board.board_id})}"
               >
                 <img
                   class="img-thumbnail w-50 h-50 me-3"
@@ -77,7 +77,7 @@
                 <div>
                   <h4
                     class="card-title fw-bold text-dark"
-                    th:text="${board.name}"
+                    th:text="${board.board_name}"
                   >
                     게시판 이름
                   </h4>
@@ -94,7 +94,7 @@
                 >
                   <button
                     class="btn btn-outline-primary lh-1"
-                    th:onclick="'event.preventDefault(); location.href=\'/boards/' + ${board.id} + '/edit\''"
+                    th:onclick="'event.preventDefault(); location.href=\'/boards/' + ${board.board_id} + '/edit\''"
                   >
                     <span class="material-symbols-outlined"> edit </span>
                   </button>
@@ -102,7 +102,7 @@
                     class="btn btn-outline-danger lh-1"
                     data-bs-toggle="modal"
                     data-bs-target="#deleteModal"
-                    th:onclick="handleDeleteButton(event, [[${board.id}]]);"
+                    th:onclick="handleDeleteButton(event, [[${board.board_id}]]);"
                   >
                     <span class="material-symbols-outlined"> delete </span>
                   </button>
