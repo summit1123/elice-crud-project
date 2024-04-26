@@ -1,8 +1,7 @@
-package com.elice.boardproject.board;
+package com.elice.boardproject.controller;
 
-import com.elice.boardproject.board.entity.Board;
-import com.elice.boardproject.board.repository.BoardRepository;
-import java.util.ArrayList;
+import com.elice.boardproject.entity.Board;
+import com.elice.boardproject.repository.BoardRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,18 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
 
     }
 
-    @RequestMapping(value = "/boards/create")
-    public ModelAndView second() {
-        ModelAndView Mav = new ModelAndView("board/createBoard");
-        return Mav;
-    }
 
-
-
-    @PostMapping("/boards/create")
-    String addPost(@RequestParam String name, @RequestParam String description) {
+    @PostMapping("/boards")
+    String addPost(@RequestParam String board_name, @RequestParam String description) {
         Board board = new Board();
-        board.setName(name);
+        board.setBoard_name(board_name);
         board.setDescription(description);
         boardRepository.save(board);
         return "redirect:/";
