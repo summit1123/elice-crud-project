@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- ... -->
+</head>
+<body>
+<div class="container my-5">
+  <div class="header mb-5">
+    <h1 class="text-center">사용자 수정</h1>
+  </div>
+  <form th:action="@{/users/{userId}/edit(userId=${user.user_id})}" method="post">
+    <!-- ... -->
+  </form>
+</div>
+<!-- ... -->
+</body>
+</html>

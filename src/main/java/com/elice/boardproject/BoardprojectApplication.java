@@ -1,8 +1,8 @@
 package com.elice.boardproject;
-
-import com.elice.boardproject.board.repository.BoardRepository;
-import com.elice.boardproject.comment.repository.CommentRepository;
-import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.service.BoardService;
+import com.elice.boardproject.service.CommentService;
+import com.elice.boardproject.service.PostService;
+import com.elice.boardproject.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,8 @@ public class BoardprojectApplication {
 
 	@Bean
 	@Profile("local")
-	public DataInit stubDataInit(BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
-		return new DataInit(boardRepository, postRepository, commentRepository);
+	public DataInit stubDataInit(BoardService boardService, PostService postservice, CommentService commentService, UserService userService) {
+		return new DataInit(boardService, postservice, commentService, userService);
 	}
 
 }

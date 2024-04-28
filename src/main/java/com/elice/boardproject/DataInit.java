@@ -1,11 +1,13 @@
 package com.elice.boardproject;
 
-import com.elice.boardproject.board.repository.BoardRepository;
-import com.elice.boardproject.comment.repository.CommentRepository;
-import com.elice.boardproject.post.repository.PostRepository;
+
+import com.elice.boardproject.service.BoardService;
+import com.elice.boardproject.service.CommentService;
+import com.elice.boardproject.service.PostService;
+import com.elice.boardproject.service.UserService;
 
 public class DataInit {
 
-    public DataInit(BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
+    public DataInit(BoardService boardService, PostService postService, CommentService commentService, UserService userService) {
     }
 }
