@@ -23,15 +23,19 @@ public class CommentController {
     }
 
     @PostMapping("/comments/{commentId}/edit")
-    public String updateComment(@PathVariable int commentId, @ModelAttribute Comment comment) {
-        commentService.updateComment(commentId, comment);
-        return "redirect:/posts/" + commentService.getCommentById(commentId).getPost().getId();
+    public String updateComment(@PathVariable int commentId, @ModelAttribute Comment updatedComment) {
+        commentService.updateComment(commentId, updatedComment);
+        return "redirect:/posts/" + commentService.getCommentById(commentId).getPost().getPost_id();
     }
+
+
 
     @DeleteMapping("/comments/{commentId}")
     public String deleteComment(@PathVariable int commentId) {
-        int postId = commentService.getCommentById(commentId).getPost().getId();
+        int postId = commentService.getCommentById(commentId).getPost().getPost_id();
         commentService.deleteComment(commentId);
         return "redirect:/posts/" + postId;
     }
+
+
 }

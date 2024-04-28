@@ -53,6 +53,6 @@ public class PostController {
     @DeleteMapping("/posts/{postId}")
     public String deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
-        return "redirect:/boards/" + postService.getPostById(postId).getBoard().getId();
+        return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoard_id();
     }
 }

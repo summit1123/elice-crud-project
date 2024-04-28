@@ -1,26 +1,18 @@
 package com.elice.boardproject.controller;
 import com.elice.boardproject.entity.Board;
-import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.entity.User;
-import com.elice.boardproject.repository.BoardRepository;
-import com.elice.boardproject.repository.PostRepository;
 import com.elice.boardproject.repository.UserRepository;
 import com.elice.boardproject.service.BoardService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.sql.Date;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -43,7 +35,9 @@ public class BoardController {
 
     @PostMapping("/boards/create")
     public String createBoard(@ModelAttribute Board board, @RequestParam("userId") int userId) {
-        board.setUserId(userId);
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + userId));
+        board.setUser(user);
         boardService.createBoard(board);
         return "redirect:/boards";
     }
@@ -56,10 +50,9 @@ public class BoardController {
     }
 
 
-
     @PostMapping("/boards/{boardId}/edit")
-    public String updateBoard(@PathVariable int boardId, @RequestParam("name") String name, @RequestParam("description") String description) {
-        boardService.updateBoard(boardId ,name, description);
+    public String updateBoard(@PathVariable int boardId, @ModelAttribute Board updatedBoard) {
+        boardService.updateBoard(boardId, updatedBoard);
         return "redirect:/boards";
     }
 

@@ -32,7 +32,7 @@ public class BoardService {
 
     public Board updateBoard(int boardId, Board updatedBoard) {
         Board board = getBoardById(boardId);
-        board.setName(updatedBoard.getName());
+        board.setBoard_name(updatedBoard.getBoard_name());
         board.setDescription(updatedBoard.getDescription());
         return boardRepository.save(board);
     }

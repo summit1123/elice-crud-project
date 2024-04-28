@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    private int post_id;
 
     @Column(nullable = false)
     private String title;
@@ -41,6 +41,6 @@ public class Post {
     private User user;
 
     @Column(name = "created_at")
-    private Date created_at;
+    private LocalDateTime created_at;
 
 }
