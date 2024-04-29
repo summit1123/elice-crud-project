@@ -5,6 +5,7 @@ import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "username"));
     }
 
     public User getUserById(int userId) {
