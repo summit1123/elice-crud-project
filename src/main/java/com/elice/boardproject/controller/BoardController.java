@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    private final UserRepository userRepository;
+    private final UserRepository userService;
 
     @GetMapping("/boards")
     public String list(Model model) {
@@ -29,13 +29,13 @@ public class BoardController {
 
     @GetMapping("/boards/create")
     public String createBoardForm(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "board/createBoard";
     }
 
     @PostMapping("/boards/create")
     public String createBoard(@ModelAttribute Board board, @RequestParam("userId") int userId) {
-        User user = userRepository.findById(userId)
+        User user = userService.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + userId));
         board.setUser(user);
         boardService.createBoard(board);

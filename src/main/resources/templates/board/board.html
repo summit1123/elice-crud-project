@@ -43,7 +43,7 @@
       <label for="userId">작성자</label>
       <select class="form-control" id="userId" name="userId" required>
         <option value="" disabled selected>작성자 선택</option>
-        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+        <option th:each="user : ${users}" th:value="${user.user_id}" th:text="${user.username}"></option>
       </select>
     </div>
     <button type="submit" class="btn btn-primary">게시판 추가</button>

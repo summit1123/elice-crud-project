@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +42,6 @@ public class Post {
     private User user;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private Timestamp created_at;
 
 }

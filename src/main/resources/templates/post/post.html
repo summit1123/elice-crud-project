@@ -81,7 +81,7 @@
                 class="btn btn-outline-primary lh-1"
                 data-bs-toggle="modal"
                 data-bs-target="#editCommentModal"
-                th:onclick="handleEditCommentButton(event, [[${comment.comment_id}]], [[${comment.content}]]);">
+                th:onclick="handleEditCommentButton(event, ${comment.comment_id}, ${comment.content});">
               <span class="material-symbols-outlined"> edit </span>
             </button>
             <form th:action="@{/comments/{commentId}(commentId=${comment.comment_id})}" method="post" class="d-inline">
