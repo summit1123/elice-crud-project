@@ -1,6 +1,6 @@
 package com.elice.boardproject.controller;
 
-
+//깃 .DS_Store 파일 삭제
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.service.CommentService;
