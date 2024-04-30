@@ -18,23 +18,36 @@ public class CommentController {
 
     @PostMapping("/comments")
     public String createComment(@RequestParam("postId") int postId, @ModelAttribute Comment comment) {
+        try {
         commentService.createComment(postId, comment);
-        return "redirect:/posts/" + postId;
+            return "redirect:/posts/" + postId;
+        } catch (IllegalArgumentException e) {
+            // 예외 발생 시 에러 페이지로 리다이렉트하거나 에러 메시지를 모델에 담아 View로 전달할 수 있습니다.
+            return "error/404";
+        }
     }
 
     @PostMapping("/comments/{commentId}/edit")
     public String updateComment(@PathVariable int commentId, @ModelAttribute Comment updatedComment) {
-        commentService.updateComment(commentId, updatedComment);
-        return "redirect:/posts/" + commentService.getCommentById(commentId).getPost().getPost_id();
+        try {
+            commentService.updateComment(commentId, updatedComment);
+            return "redirect:/posts/" + commentService.getCommentById(commentId).getPost()
+                .getPost_id();
+        } catch (IllegalArgumentException e) {
+            return "error/404";
+        }
     }
-
 
 
     @DeleteMapping("/comments/{commentId}")
     public String deleteComment(@PathVariable int commentId) {
-        int postId = commentService.getCommentById(commentId).getPost().getPost_id();
-        commentService.deleteComment(commentId);
-        return "redirect:/posts/" + postId;
+        try {
+            int postId = commentService.getCommentById(commentId).getPost().getPost_id();
+            commentService.deleteComment(commentId);
+            return "redirect:/posts/" + postId;
+        } catch (IllegalArgumentException e) {
+            return "error/404";
+        }
     }
 
 

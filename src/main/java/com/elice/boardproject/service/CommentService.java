@@ -5,6 +5,7 @@ import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.repository.CommentRepository;
 import com.elice.boardproject.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
+    @Transactional
     public Comment getCommentById(int commentId) {
         return commentRepository.findById(commentId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid comment id: " + commentId));
@@ -27,12 +29,14 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public Comment updateComment(int commentId, Comment updatedComment) {
         Comment comment = getCommentById(commentId);
         comment.setContent(updatedComment.getContent());
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public List<Comment> getCommentsByPost(Post post) {
         return commentRepository.findByPost(post);
     }

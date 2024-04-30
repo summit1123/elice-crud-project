@@ -3,6 +3,7 @@ package com.elice.boardproject.service;
 
 import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -22,14 +23,17 @@ public class UserService {
             .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + userId));
     }
 
+    @Transactional
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
 
     public User createUser(User user) {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(int userId, User updatedUser) {
         User user = getUserById(userId);
         user.setUsername(updatedUser.getUsername());

@@ -1,6 +1,7 @@
 package com.elice.boardproject.controller;
 
 //깃 .DS_Store 파일 삭제
+import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.service.CommentService;
@@ -24,11 +25,15 @@ public class PostController {
 
     @GetMapping("/posts/{postId}")
     public String getPost(@PathVariable int postId, Model model) {
-        Post post = postService.getPostById(postId);
-        model.addAttribute("post", post);
-        List<Comment> comments = commentService.getCommentsByPost(post);
-        model.addAttribute("comments", comments);
-        return "post/post";
+        try {
+            Post post = postService.getPostById(postId);
+            model.addAttribute("post", post);
+            List<Comment> comments = commentService.getCommentsByPost(post);
+            model.addAttribute("comments", comments);
+            return "post/post";
+        } catch (IllegalArgumentException e) {
+            return "error/404";
+        }
     }
 
     @GetMapping("/posts/create")
@@ -60,5 +65,6 @@ public class PostController {
     public String deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
         return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoard_id();
+
     }
 }

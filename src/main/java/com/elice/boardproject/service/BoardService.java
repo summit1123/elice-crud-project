@@ -25,7 +25,7 @@ public class BoardService {
         return boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
     }
-
+//나는 김동현
     public Board createBoard(Board board) {
         return boardRepository.save(board);
     }

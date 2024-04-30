@@ -46,9 +46,13 @@ public class BoardController {
 
     @GetMapping("/boards/{boardId}/edit")
     public String editBoardForm(@PathVariable int boardId, Model model) {
-        Board board = boardService.getBoardById(boardId);
-        model.addAttribute("board", board);
-        return "board/editBoard";
+        try {
+            Board board = boardService.getBoardById(boardId);
+            model.addAttribute("board", board);
+            return "board/editBoard";
+        } catch (IllegalArgumentException e) {
+            return "error/404";
+        }
     }
 
 
@@ -62,6 +66,7 @@ public class BoardController {
     public String deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
         return "redirect:/boards";
+
     }
 }
 

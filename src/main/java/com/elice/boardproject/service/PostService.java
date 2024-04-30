@@ -3,11 +3,11 @@ import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.repository.BoardRepository;
 import com.elice.boardproject.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 
 @Service
@@ -25,6 +25,7 @@ public class PostService {
         return postRepository.findByBoard(board, pageable);
     }
 
+    @Transactional
     public Post createPost(int boardId, Post post) {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
@@ -32,6 +33,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    @Transactional
     public Post updatePost(int postId, Post updatedPost) {
         Post post = getPostById(postId);
         post.setTitle(updatedPost.getTitle());
