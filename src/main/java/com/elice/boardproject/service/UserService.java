@@ -35,6 +35,7 @@ public class UserService {
         user.setUsername(updatedUser.getUsername());
         // Update other user fields as needed
         return userRepository.save(user);
+
     }
 
     public void deleteUser(int userId) {

@@ -5,6 +5,7 @@ import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.repository.CommentRepository;
 import com.elice.boardproject.repository.PostRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,10 @@ public class CommentService {
         Comment comment = getCommentById(commentId);
         comment.setContent(updatedComment.getContent());
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> getCommentsByPost(Post post) {
+        return commentRepository.findByPost(post);
     }
 
     public void deleteComment(int commentId) {

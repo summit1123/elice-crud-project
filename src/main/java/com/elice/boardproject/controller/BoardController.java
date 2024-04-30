@@ -3,10 +3,12 @@ import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.UserRepository;
 import com.elice.boardproject.service.BoardService;
+import com.elice.boardproject.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +58,7 @@ public class BoardController {
         return "redirect:/boards";
     }
 
-    @PostMapping("/boards/{boardId}/delete")
+    @DeleteMapping("/boards/{boardId}")
     public String deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
         return "redirect:/boards";

@@ -1,7 +1,6 @@
 package com.elice.boardproject.controller;
 
 import com.elice.boardproject.entity.User;
-import com.elice.boardproject.service.BoardService;
 import com.elice.boardproject.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

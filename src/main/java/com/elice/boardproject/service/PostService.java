@@ -1,5 +1,4 @@
 package com.elice.boardproject.service;
-
 import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.repository.BoardRepository;

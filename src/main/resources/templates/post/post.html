@@ -102,7 +102,7 @@
 
     <form
         class="mt-3 row"
-        th:action="@{/comments(postId=${post.post_id})}"
+        th:action="@{/comments(postId=${post.post.post.post_id})}"
         method="POST"
     >
       <div class="input-group">
@@ -129,7 +129,7 @@
         <li>
           <button
               class="dropdown-item d-flex align-items-center gap-2"
-              th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''"
+              th:onclick="'location.href=\'/posts/' + ${post.post.post_id} + '/edit\''"
           >
             <span class="material-symbols-outlined"> edit </span>수정
           </button>
@@ -139,7 +139,7 @@
               class="dropdown-item text-danger btn btn-danger d-flex align-items-center gap-2"
               data-bs-toggle="modal"
               data-bs-target="#deletePostModal"
-              th:onclick="handleDeletePostButton(event, [[${post.id}]], [[${post.board.id}]]);"
+              th:onclick="handleDeletePostButton(event, [[${post_id}]], [[${post.board.board.id}]]);"
           >
             <span class="material-symbols-outlined"> delete </span>삭제
           </button>

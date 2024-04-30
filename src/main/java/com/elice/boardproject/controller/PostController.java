@@ -1,8 +1,11 @@
 package com.elice.boardproject.controller;
 
 
+import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
+import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.PostService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("/posts/{postId}")
     public String getPost(@PathVariable int postId, Model model) {
         Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
+        List<Comment> comments = commentService.getCommentsByPost(post);
+        model.addAttribute("comments", comments);
         return "post/post";
     }
 
