@@ -37,14 +37,20 @@
   </style>
   <title th:text="${post.title}"></title>
 </head>
+<div class="d-flex justify-content-between mb-3">
+  <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2" style="transition: all 0.1s ease-in-out" th:href="@{/boards/{boardId}(boardId=${post.board.board_id})}">&larr; 게시판으로 돌아가기</a>
+  <a th:href="@{/posts/create(boardId=${post.board.board_id})}" class="btn btn-primary">새 게시글 작성</a>
+</div>
 <body>
 <div class="container my-5 mx-auto">
-  <a
-      class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
-      style="transition: all 0.1s ease-in-out"
-      th:href="@{/boards/{boardId}(boardId=${post.board.id})}"
-  >&larr; 게시판으로 돌아가기</a
-  >
+  <div class="d-flex justify-content-between mb-3">
+    <a
+        class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2"
+        style="transition: all 0.1s ease-in-out"
+        th:href="@{/boards/{boardId}(boardId=${post.board.board_id})}"
+    >&larr; 게시판으로 돌아가기</a>
+    <a th:href="@{/posts/create(boardId=${post.board.board_id})}" class="btn btn-primary">새 게시글 작성</a>
+  </div>
   <div class="container border rounded p-4 position-relative">
     <div class="header mb-3">
       <h2 class="text-start" th:text="${post.title}">게시글 제목</h2>

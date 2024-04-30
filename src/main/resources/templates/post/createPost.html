@@ -29,24 +29,15 @@
   <form th:action="@{/posts/create(boardId=${boardId})}" method="post">
     <div class="mb-3">
       <label for="title">게시글 제목</label>
-      <input
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          maxlength="30"
-          placeholder="게시글 제목 입력 (최대 30자)"
-          required
-      />
+      <input type="text" class="form-control" id="title" name="user_id" maxlength="30" title="게시글 제목 입력 (최대 30자)" required>
     </div>
     <div class="mb-3">
       <label for="content">내용</label>
-      <textarea
-          class="form-control"
-          id="content"
-          name="content"
-          placeholder="내용 입력"
-      ></textarea>
+      <textarea class="form-control" id="content" name="content" placeholder="내용 입력"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="userId">작성자</label>
+      <input type="text" class="form-control" id="userId" name="userId" required>
     </div>
     <button type="submit" class="btn btn-primary">업로드</button>
     <button

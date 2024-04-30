@@ -4,8 +4,10 @@ package com.elice.boardproject.controller;
 import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
+import com.elice.boardproject.entity.User;
 import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.PostService;
+import com.elice.boardproject.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
     private final PostService postService;
     private final CommentService commentService;
+    private final UserService userService;
 
     @GetMapping("/posts/{postId}")
     public String getPost(@PathVariable int postId, Model model) {
@@ -38,12 +41,17 @@ public class PostController {
 
     @GetMapping("/posts/create")
     public String createPostForm(@RequestParam("boardId") int boardId, Model model) {
+        List<User> users = userService.getAllUsers();
         model.addAttribute("boardId", boardId);
+        model.addAttribute("users", users);
         return "post/createPost";
     }
 
+
     @PostMapping("/posts/create")
-    public String createPost(@RequestParam("boardId") int boardId, @ModelAttribute Post post) {
+    public String createPost(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post) {
+        User user = userService.getUserById(userId);
+        post.setUser(user);
         postService.createPost(boardId, post);
         return "redirect:/boards/" + boardId;
     }

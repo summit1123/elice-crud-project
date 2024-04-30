@@ -3,6 +3,7 @@ package com.elice.boardproject.controller;
 
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.service.CommentService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
