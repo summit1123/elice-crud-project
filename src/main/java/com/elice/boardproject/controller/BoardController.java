@@ -76,4 +76,4 @@ public class BoardController {
         return "board/boardDetail";
     }
 }
-
+//하 푸시안돼 ㅠㅠ
