@@ -21,23 +21,19 @@
   </style>
   <title>게시판 추가</title>
 </head>
+</head>
 <body>
 <div class="container my-5">
   <div class="header mb-5">
     <h1 class="text-center">게시판 추가</h1>
   </div>
+  <div th:if="${error}" class="alert alert-danger" role="alert">
+    <p th:text="${error}"></p>
+  </div>
   <form th:action="@{/boards/create}" method="post">
     <div class="mb-3">
       <label for="name">게시판 이름</label>
-      <input
-          type="text"
-          class="form-control"
-          id="name"
-          name="name"
-          maxlength="20"
-          placeholder="게시판 이름 입력 (최대 20자)"
-          required
-      />
+      <input type="text" class="form-control" id="name" name="board_name" maxlength="20" placeholder="게시판 이름 입력 (최대 20자)" required />
     </div>
     <div class="mb-3">
       <label for="description">게시판 설명</label>

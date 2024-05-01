@@ -6,6 +6,7 @@ import com.elice.boardproject.service.BoardService;
 import com.elice.boardproject.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @Controller
@@ -36,16 +38,16 @@ public class BoardController {
     }
 
     @PostMapping("/boards/create")
-    public String createBoard(@ModelAttribute Board board, @RequestParam("userId") int userId, Model model) {
+    public String createBoard(@ModelAttribute("board") Board board, @RequestParam("userId") int userId, Model model) {
         try {
             User user = userService.getUserById(userId);
             board.setUser(user);
             boardService.createBoard(board);
             return "redirect:/boards";
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("board", board); // 기존 입력 값을 유지하기 위해 board 객체도 모델에 추가
-            model.addAttribute("users", userService.getAllUsers()); // 사용자 목록도 모델에 추가
+            model.addAttribute("error", "존재하지 않는 사용자입니다.");
+            model.addAttribute("board", board);
+            model.addAttribute("users", userService.getAllUsers());
             return "board/createBoard";
         }
     }
@@ -69,10 +71,9 @@ public class BoardController {
     }
 
     @DeleteMapping("/boards/{boardId}")
-    public String deleteBoard(@PathVariable int boardId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
-        return "redirect:/boards";
-
     }
 
     @GetMapping("/boards/{boardId}")

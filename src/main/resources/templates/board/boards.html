@@ -98,12 +98,9 @@
               >
                 <span class="material-symbols-outlined"> edit </span>
               </button>
-              <form th:action="@{/boards/{boardId}(boardId=${board.board_id})}" method="post">
-                <input type="hidden" name="_method" value="delete" />
-                <button type="submit" class="btn btn-outline-danger lh-1" data-bs-toggle="modal" data-bs-target="#deleteModal" th:onclick="handleDeleteButton(event, ${board.board_id})">
-                  <span class="material-symbols-outlined"> delete </span>
-                </button>
-              </form>
+              <button type="button" class="btn btn-outline-danger lh-1" data-bs-toggle="modal" data-bs-target="#deleteModal" th:attr="data-board-id=${board.board_id}">
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
             </div>
           </a>
         </div>
@@ -117,13 +114,7 @@
   </div>
 </div>
 
-<div
-    class="modal fade"
-    id="deleteModal"
-    tabindex="-1"
-    aria-labelledby="deleteModalLabel"
-    aria-hidden="true"
->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -161,17 +152,23 @@
 </div>
 
 <script th:inline="javascript">
-  let currentBoard;
+  const deleteModal = document.getElementById('deleteModal');
+  let currentBoardId;
 
-  function handleDeleteButton(e, boardId) {
-    e.preventDefault();
-    currentBoard = boardId;
-  }
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    currentBoardId = button.getAttribute('data-board-id');
+  });
 
   function handleDeleteModalButton() {
-    fetch(`/boards/${currentBoard}/delete`, {
+    fetch(`/boards/${currentBoardId}`, {
       method: "DELETE",
-    }).then(() => (window.location.href = "/boards"));
+    }).then(() => {
+      deleteModal.querySelector('.btn-close').click();
+      location.reload();
+      }).catch((error) => {
+      console.error('Error:', error);
+    });
   }
 </script>
 
