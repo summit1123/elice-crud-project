@@ -49,11 +49,19 @@ public class PostController {
 
 
     @PostMapping("/posts/create")
-    public String createPost(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post) {
-        User user = userService.getUserById(userId);
-        post.setUser(user);
-        postService.createPost(boardId, post);
-        return "redirect:/boards/" + boardId;
+    public String createPost(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post, Model model) {
+        try {
+            User user = userService.getUserById(userId);
+            post.setUser(user);
+            postService.createPost(boardId, post);
+            return "redirect:/boards/" + boardId;
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("boardId", boardId);
+            List<User> users = userService.getAllUsers();
+            model.addAttribute("users", users);
+            return "post/createPost";
+        }
     }
 
     @GetMapping("/posts/{postId}/edit")

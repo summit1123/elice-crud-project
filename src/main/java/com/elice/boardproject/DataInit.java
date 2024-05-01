@@ -16,14 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DataInit {
+
     private final BoardService boardService;
     private final PostService postService;
     private final CommentService commentService;
     private final UserService userService;
-
-//    @PostConstruct
-//    @Transactional
-//    public void initData() {
-//    }
 
 }

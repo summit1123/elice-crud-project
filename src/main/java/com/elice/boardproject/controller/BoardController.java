@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    private final UserRepository userService;
+    private final UserService userService;
 
     @GetMapping("/boards")
     public String list(Model model) {
@@ -31,17 +31,23 @@ public class BoardController {
 
     @GetMapping("/boards/create")
     public String createBoardForm(Model model) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.getAllUsers());
         return "board/createBoard";
     }
 
     @PostMapping("/boards/create")
-    public String createBoard(@ModelAttribute Board board, @RequestParam("userId") int userId) {
-        User user = userService.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + userId));
-        board.setUser(user);
-        boardService.createBoard(board);
-        return "redirect:/boards";
+    public String createBoard(@ModelAttribute Board board, @RequestParam("userId") int userId, Model model) {
+        try {
+            User user = userService.getUserById(userId);
+            board.setUser(user);
+            boardService.createBoard(board);
+            return "redirect:/boards";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("board", board); // 기존 입력 값을 유지하기 위해 board 객체도 모델에 추가
+            model.addAttribute("users", userService.getAllUsers()); // 사용자 목록도 모델에 추가
+            return "board/createBoard";
+        }
     }
 
     @GetMapping("/boards/{boardId}/edit")
@@ -76,4 +82,4 @@ public class BoardController {
         return "board/boardDetail";
     }
 }
-//하 푸시안돼 ㅠㅠ
+

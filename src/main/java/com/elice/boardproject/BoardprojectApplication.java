@@ -18,7 +18,6 @@ public class BoardprojectApplication {
 	}
 
 	@Bean
-	@Profile("local")
 	public DataInit dataInit(BoardService boardService, PostService postservice, CommentService commentService, UserService userService) {
 		return new DataInit(boardService, postservice, commentService, userService);
 	}

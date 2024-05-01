@@ -5,7 +5,9 @@ import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.BoardRepository;
 import com.elice.boardproject.repository.PostRepository;
 import com.elice.boardproject.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,10 @@ public class BoardService {
         return boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
     }
-//나는 김동현
+
+    @Transactional
     public Board createBoard(Board board) {
+        board.setCreated_at(new Timestamp(System.currentTimeMillis()));
         return boardRepository.save(board);
     }
 

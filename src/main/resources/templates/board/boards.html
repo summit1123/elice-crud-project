@@ -98,8 +98,9 @@
               >
                 <span class="material-symbols-outlined"> edit </span>
               </button>
-              <form th:action="@{/boards/{boardId}(boardId=${board.board_id})}" th:method="delete">
-                <button type="submit" class="btn btn-outline-danger lh-1">
+              <form th:action="@{/boards/{boardId}(boardId=${board.board_id})}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" class="btn btn-outline-danger lh-1" data-bs-toggle="modal" data-bs-target="#deleteModal" th:onclick="handleDeleteButton(event, ${board.board_id})">
                   <span class="material-symbols-outlined"> delete </span>
                 </button>
               </form>

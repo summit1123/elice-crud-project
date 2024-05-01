@@ -27,7 +27,7 @@ public class PostService {
         return postRepository.findByBoard(board, pageable);
     }
 
-    @Transactional
+
     public Post createPost(int boardId, Post post) {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
