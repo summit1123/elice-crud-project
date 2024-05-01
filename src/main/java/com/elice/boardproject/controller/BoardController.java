@@ -73,7 +73,7 @@ public class BoardController {
     public String getBoardDetail(@PathVariable int boardId, Model model) {
         Board board = boardService.getBoardById(boardId);
         model.addAttribute("board", board);
-        return "board/board";
+        return "board/boardDetail";
     }
 }
 
