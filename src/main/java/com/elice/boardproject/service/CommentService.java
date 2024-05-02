@@ -1,6 +1,7 @@
 package com.elice.boardproject.service;
 
 
+import com.elice.boardproject.dto.CommentDTO;
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.entity.User;
@@ -9,6 +10,7 @@ import com.elice.boardproject.repository.PostRepository;
 import com.elice.boardproject.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,14 @@ public class CommentService {
         Comment comment = getCommentById(commentId);
         comment.setContent(updatedComment.getContent());
         return commentRepository.save(comment);
+    }
+
+    @Transactional
+    public List<CommentDTO> getCommentDTOsByPost(Post post) {
+        List<Comment> comments = commentRepository.findByPost(post);
+        return comments.stream()
+            .map(CommentDTO::new)
+            .collect(Collectors.toList());
     }
 
     @Transactional

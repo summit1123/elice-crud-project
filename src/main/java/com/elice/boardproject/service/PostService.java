@@ -47,6 +47,9 @@ public class PostService {
     }
 
     public void deletePost(int postId) {
+        if (!postRepository.existsById(postId)) {
+            throw new PostNotFoundException("Post not found with id: " + postId);
+        }
         postRepository.deleteById(postId);
     }
 
@@ -56,7 +59,7 @@ public class PostService {
         return new PostDTO(post);
     }
 
-     public Page<Post> searchPosts(Board board, String keyword, Pageable pageable) {
-       return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword, keyword, pageable);
+    public Page<Post> searchPosts(Board board, String keyword, Pageable pageable) {
+        return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword, keyword, pageable);
     }
 }

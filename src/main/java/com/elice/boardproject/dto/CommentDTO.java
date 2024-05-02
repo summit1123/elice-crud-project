@@ -14,11 +14,13 @@ public class CommentDTO {
     private String content;
     private String username;
     private Timestamp created_at;
+    private int userId;
 
     public CommentDTO(Comment comment) {
         this.commentId = comment.getCommentId();
         this.content = comment.getContent();
         this.username = comment.getUser().getUsername();
         this.created_at = comment.getCreated_at();
+        this.userId = comment.getUser().getUserId();
     }
 }

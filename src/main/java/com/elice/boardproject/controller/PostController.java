@@ -1,6 +1,7 @@
 package com.elice.boardproject.controller;
 
 
+import com.elice.boardproject.PostNotFoundException;
 import com.elice.boardproject.dto.CommentDTO;
 import com.elice.boardproject.dto.PostDTO;
 import com.elice.boardproject.entity.Board;
@@ -10,9 +11,11 @@ import com.elice.boardproject.entity.User;
 import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.PostService;
 import com.elice.boardproject.service.UserService;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,11 +37,15 @@ public class PostController {
         try {
             PostDTO postDTO = postService.getPostDTOById(postId);
             model.addAttribute("post", postDTO);
-            List<Comment> comments = commentService.getCommentsByPost(postService.getPostById(postId));
-            model.addAttribute("comments", comments);
+
+            List<CommentDTO> commentDTOs = commentService.getCommentDTOsByPost(postService.getPostById(postId));
+            model.addAttribute("comments", commentDTOs);
+
             return "post/post";
-        } catch (IllegalArgumentException e) {
+        } catch (PostNotFoundException e) {
             return "error/404";
+        } catch (Exception e) {
+            return "error/500";
         }
     }
 
@@ -86,6 +93,8 @@ public class PostController {
     public String deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
         return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoardId();
+
+
 
     }
 }

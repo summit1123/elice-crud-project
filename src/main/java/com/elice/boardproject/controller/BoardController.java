@@ -70,8 +70,12 @@ public class BoardController {
 
     @PostMapping("/boards/{boardId}/edit")
     public String updateBoard(@PathVariable int boardId, @ModelAttribute Board updatedBoard) {
-        boardService.updateBoard(boardId, updatedBoard);
-        return "redirect:/boards";
+        try {
+            boardService.updateBoard(boardId, updatedBoard);
+            return "redirect:/boards/" + boardId;
+        } catch (IllegalArgumentException e) {
+            return "error/400";
+        }
     }
 
 

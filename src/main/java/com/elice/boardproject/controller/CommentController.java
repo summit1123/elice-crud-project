@@ -37,8 +37,8 @@ public class CommentController {
     public String updateComment(@PathVariable int commentId, @ModelAttribute Comment updatedComment) {
         try {
             commentService.updateComment(commentId, updatedComment);
-            return "redirect:/posts/" + commentService.getCommentById(commentId).getPost()
-                .getPostId();
+            int postId = commentService.getCommentById(commentId).getPost().getPostId();
+            return "redirect:/posts/" + postId;
         } catch (IllegalArgumentException e) {
             return "error/404";
         }
