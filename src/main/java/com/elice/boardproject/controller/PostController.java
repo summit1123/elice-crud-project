@@ -1,6 +1,8 @@
 package com.elice.boardproject.controller;
 
-//깃 .DS_Store 파일 삭제
+
+import com.elice.boardproject.dto.CommentDTO;
+import com.elice.boardproject.dto.PostDTO;
 import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Comment;
 import com.elice.boardproject.entity.Post;
@@ -9,6 +11,7 @@ import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.PostService;
 import com.elice.boardproject.service.UserService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,15 +32,17 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public String getPost(@PathVariable int postId, Model model) {
         try {
-            Post post = postService.getPostById(postId);
-            model.addAttribute("post", post);
-            List<Comment> comments = commentService.getCommentsByPost(post);
+            PostDTO postDTO = postService.getPostDTOById(postId);
+            model.addAttribute("post", postDTO);
+            List<Comment> comments = commentService.getCommentsByPost(postService.getPostById(postId));
             model.addAttribute("comments", comments);
             return "post/post";
         } catch (IllegalArgumentException e) {
             return "error/404";
         }
     }
+
+
 
     @GetMapping("/posts/create")
     public String createPostForm(@RequestParam("boardId") int boardId, Model model) {
@@ -49,7 +54,7 @@ public class PostController {
 
 
     @PostMapping("/posts/create")
-    public String createPost(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post, Model model) {
+    public String createPost(@RequestParam int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post, Model model) {
         try {
             User user = userService.getUserById(userId);
             post.setUser(user);
@@ -80,7 +85,7 @@ public class PostController {
     @DeleteMapping("/posts/{postId}")
     public String deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
-        return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoard_id();
+        return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoardId();
 
     }
 }

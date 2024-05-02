@@ -22,4 +22,12 @@ public class DataInit {
     private final CommentService commentService;
     private final UserService userService;
 
+
+    @PostConstruct
+    public void init() {
+        // "익명" 사용자 생성
+        User anonymousUser = new User();
+        anonymousUser.setUsername("김동현");
+        userService.createUser(anonymousUser);
+    }
 }

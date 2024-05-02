@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int post_id;
+    private int postId;
 
     @Column(nullable = false)
     private String title;
@@ -34,11 +34,11 @@ public class Post {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn(name = "boardId", nullable = false)
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @Column(name = "created_at")

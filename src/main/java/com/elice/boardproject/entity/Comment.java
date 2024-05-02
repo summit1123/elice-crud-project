@@ -25,17 +25,17 @@ import lombok.Setter;
 public class Comment {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int comment_id;
+    private int commentId;
 
     @Column(nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "postId", nullable = false)
     private Post post;
 
     @Column(name = "created_at")

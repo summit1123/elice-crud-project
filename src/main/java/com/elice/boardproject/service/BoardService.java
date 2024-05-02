@@ -25,7 +25,7 @@ public class BoardService {
 
     @Transactional
     public Board getBoardById(int boardId) {
-        return boardRepository.findById(boardId)
+        return boardRepository.findByIdWithPostsAndUsers(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
     }
 
@@ -37,7 +37,7 @@ public class BoardService {
 
     public Board updateBoard(int boardId, Board updatedBoard) {
         Board board = getBoardById(boardId);
-        board.setBoard_name(updatedBoard.getBoard_name());
+        board.setBoardName(updatedBoard.getBoardName());
         board.setDescription(updatedBoard.getDescription());
         return boardRepository.save(board);
     }

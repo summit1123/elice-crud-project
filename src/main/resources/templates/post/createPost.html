@@ -39,7 +39,7 @@
     <div class="mb-3">
       <label for="userId">작성자</label>
       <select class="form-control" id="userId" name="userId" required>
-        <option th:each="user : ${users}" th:value="${user.user_id}" th:text="${user.username}"></option>
+        <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
       </select>
     </div>
     <button type="submit" class="btn btn-primary">업로드</button>

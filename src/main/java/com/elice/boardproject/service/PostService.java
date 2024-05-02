@@ -1,30 +1,31 @@
 package com.elice.boardproject.service;
 import com.elice.boardproject.PostNotFoundException;
+import com.elice.boardproject.dto.PostDTO;
 import com.elice.boardproject.entity.Board;
 import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.repository.BoardRepository;
 import com.elice.boardproject.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
 
+    @Transactional
     public Post getPostById(int postId) {
         return postRepository.findById(postId)
             .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
-    }
-
-    public Page<Post> getPostsByBoard(Board board, Pageable pageable) {
-        return postRepository.findByBoard(board, pageable);
     }
 
 
@@ -49,7 +50,13 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    public Page<Post> searchPosts(Board board, String keyword, Pageable pageable) {
-        return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword, keyword, pageable);
+    @Transactional
+    public PostDTO getPostDTOById(int postId) {
+        Post post = getPostById(postId);
+        return new PostDTO(post);
+    }
+
+     public Page<Post> searchPosts(Board board, String keyword, Pageable pageable) {
+       return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword, keyword, pageable);
     }
 }

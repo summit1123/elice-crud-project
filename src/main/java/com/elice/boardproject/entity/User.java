@@ -26,12 +26,12 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_id;
+    private int userId;
 
     @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

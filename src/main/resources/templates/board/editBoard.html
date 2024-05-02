@@ -27,7 +27,7 @@
     <h1 class="text-center">게시판 수정</h1>
   </div>
   <form
-      th:action="@{/boards/{boardId}/edit(boardId=${board.board_id})}"
+      th:action="@{/boards/{boardId}/edit(boardId=${board.boardId})}"
       method="post"
   >
     <div class="mb-3">
@@ -36,11 +36,11 @@
           type="text"
           class="form-control"
           id="name"
-          name="board_name"
+          name="boardName"
           maxlength="20"
           placeholder="게시판 이름 입력 (최대 20자)"
           required
-          th:value="${board.board_name}"
+          th:value="${board.boardName}"
       />
     </div>
     <div class="mb-3">

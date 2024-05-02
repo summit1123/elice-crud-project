@@ -38,8 +38,8 @@
   <title th:text="${post.title}"></title>
 </head>
 <div class="d-flex justify-content-between mb-3">
-  <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2" style="transition: all 0.1s ease-in-out" th:href="@{/boards/{boardId}(boardId=${post.board.board_id})}">&larr; 게시판으로 돌아가기</a>
-  <a th:href="@{/posts/create(boardId=${post.board.board_id})}" class="btn btn-primary">새 게시글 작성</a>
+  <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2" style="transition: all 0.1s ease-in-out" th:href="@{/boards/{boardId}(boardId=${post.board.boardId})}">&larr; 게시판으로 돌아가기</a>
+  <a th:href="@{/posts/create(boardId=${post.board.boardId})}" class="btn btn-primary">새 게시글 작성</a>
 </div>
 <body>
 <div class="container my-5 mx-auto">
@@ -47,15 +47,15 @@
     <a
         class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2"
         style="transition: all 0.1s ease-in-out"
-        th:href="@{/boards/{boardId}(boardId=${post.board.board_id})}"
+        th:href="@{/boards/{boardId}(boardId=${post.board.boardId})}"
     >&larr; 게시판으로 돌아가기</a>
-    <a th:href="@{/posts/create(boardId=${post.board.board_id})}" class="btn btn-primary">새 게시글 작성</a>
+    <a th:href="@{/posts/create(boardId=${post.board.boardId})}" class="btn btn-primary">새 게시글 작성</a>
   </div>
   <div class="container border rounded p-4 position-relative">
     <div class="header mb-3">
       <h2 class="text-start" th:text="${post.title}">게시글 제목</h2>
-      <small class="text-muted" th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></small>
-      <span class="text-muted" th:text="${post.user.username}"></span>
+      <small class="text-muted" th:text="${#dates.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></small>
+      <span class="text-muted" th:text="${post.username}"></span>
     </div>
     <p class="m-0" th:text="${post.content}">게시글 내용</p>
     <hr class="mt-4" />
@@ -81,20 +81,24 @@
           <p class="mb-2" th:text="${comment.content}">댓글 내용</p>
           <small class="text-secondary">2024-01-04T13:21:21</small>
 
-          <div th:if="${comment.user.user_id == #authentication.principal.user_id}"
-               class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
-               role="group"
-               aria-label="edit-delete">
+          <div th:if="${comment.user.userId == post.user.userId}"
+                class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
+                role="group"
+                aria-label="edit-delete">
             <button
                 class="btn btn-outline-primary lh-1"
                 data-bs-toggle="modal"
                 data-bs-target="#editCommentModal"
-                th:onclick="handleEditCommentButton(event, ${comment.comment_id}, ${comment.content});">
+                th:onclick="handleEditCommentButton(event, ${comment.commentId}, ${comment.content});">
               <span class="material-symbols-outlined"> edit </span>
             </button>
-            <form th:action="@{/comments/{commentId}(commentId=${comment.comment_id})}" method="post" class="d-inline">
+            <form th:action="@{/comments/{commentId}(commentId=${comment.commentId})}" method="post" class="d-inline">
               <input type="hidden" name="_method" value="delete" />
-              <button type="submit" class="btn btn-outline-danger lh-1">
+              <button
+                  class="btn btn-outline-danger lh-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteCommentModal"
+                  th:onclick="handleDeleteCommentButton(event, ${comment.commentId})">
                 <span class="material-symbols-outlined"> delete </span>
               </button>
             </form>
@@ -108,12 +112,13 @@
     >댓글이 없습니다.</span
     >
 
-    <div class="mb-3">
-      <label for="content">댓글 내용</label>
-      <textarea class="form-control" id="content" name="content" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">댓글 작성</button>
-    //
+    <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
+      <div class="mb-3">
+        <label for="content">댓글 내용</label>
+        <textarea class="form-control" id="content" name="content" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">댓글 작성</button>
+    </form>
     <div class="position-absolute top-0 end-0 mt-4 me-4">
       <button
           class="btn btn-light lh-1 p-0 px-2 dropdown-toggle"
@@ -127,7 +132,7 @@
         <li>
           <button
               class="dropdown-item d-flex align-items-center gap-2"
-              th:onclick="'location.href=\'/posts/' + ${post.post.post_id} + '/edit\''"
+              th:onclick="'location.href=\'/posts/' + ${post.postId} + '/edit\''"
           >
             <span class="material-symbols-outlined"> edit </span>수정
           </button>
@@ -137,7 +142,7 @@
               class="dropdown-item text-danger btn btn-danger d-flex align-items-center gap-2"
               data-bs-toggle="modal"
               data-bs-target="#deletePostModal"
-              th:onclick="handleDeletePostButton(event, [[${post_id}]], [[${post.board.board.id}]]);"
+              th:onclick="handleDeletePostButton(event, [[${post.postId}]], [[${post.board.boardId}]]);"
           >
             <span class="material-symbols-outlined"> delete </span>삭제
           </button>
