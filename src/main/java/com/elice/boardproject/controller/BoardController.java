@@ -1,9 +1,12 @@
 package com.elice.boardproject.controller;
 import com.elice.boardproject.entity.Board;
+import com.elice.boardproject.entity.Post;
 import com.elice.boardproject.entity.User;
 import com.elice.boardproject.repository.UserRepository;
 import com.elice.boardproject.service.BoardService;
 import com.elice.boardproject.service.UserService;
+import jakarta.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -71,16 +74,18 @@ public class BoardController {
         return "redirect:/boards";
     }
 
-    @DeleteMapping("/boards/{boardId}")
+
+    @DeleteMapping("/boards/{boardId}/delete")
     public void deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
-
     }
 
 
     @GetMapping("/boards/{boardId}")
     public String getBoardDetail(@PathVariable int boardId, Model model) {
         Board board = boardService.getBoardById(boardId);
+        List<Post> emptyBoardList = Collections.emptyList(); // 빈 리스트 생성
+        board.setPosts(emptyBoardList);
         model.addAttribute("board", board);
         return "board/boardDetail";
     }
