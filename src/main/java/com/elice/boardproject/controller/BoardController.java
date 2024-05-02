@@ -6,9 +6,13 @@ import com.elice.boardproject.repository.UserRepository;
 import com.elice.boardproject.service.BoardService;
 import com.elice.boardproject.service.UserService;
 import jakarta.transaction.Transactional;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,15 +33,21 @@ public class BoardController {
     private final UserService userService;
 
     @GetMapping("/boards")
-    public String list(Model model) {
-        List<Board> boards = boardService.getAllBoards();
-        model.addAttribute("boards", boards);
+    public String list(@PageableDefault(size = 10) Pageable pageable, Model model) {
+        Page<Board> boardPage = boardService.getAllBoards(pageable);
+        model.addAttribute("boardPage", boardPage);
         return "board/boards";
     }
 
     @GetMapping("/boards/create")
-    public String createBoardForm(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String createBoardForm(Principal principal, Model model) {
+        if (principal != null) {
+            User currentUser = userService.getUserByUsername(principal.getName());
+            model.addAttribute("currentUser", currentUser);
+        } else {
+            // 인증되지 않은 사용자에 대한 처리 로직 추가
+            return "redirect:/login";
+        }
         return "board/createBoard";
     }
 
@@ -80,6 +90,7 @@ public class BoardController {
 
 
     @DeleteMapping("/boards/{boardId}/delete")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
     }

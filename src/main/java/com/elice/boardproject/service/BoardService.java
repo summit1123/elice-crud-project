@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -19,8 +21,8 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public List<Board> getAllBoards() {
-        return boardRepository.findAll();
+    public Page<Board> getAllBoards(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 
     @Transactional

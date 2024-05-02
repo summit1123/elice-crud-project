@@ -8,6 +8,7 @@ import com.elice.boardproject.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,7 +60,14 @@ public class PostService {
         return new PostDTO(post);
     }
 
-    public Page<Post> searchPosts(Board board, String keyword, Pageable pageable) {
-        return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword, keyword, pageable);
+    public Page<Post> findPostsByBoardAndKeyword(int boardId, Optional<String> keyword, Pageable pageable) {
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));
+
+        if (keyword.isPresent()) {
+            return postRepository.findByBoardAndTitleContainingOrContentContaining(board, keyword.get(), keyword.get(), pageable);
+        } else {
+            return postRepository.findByBoard(board, pageable);
+        }
     }
 }

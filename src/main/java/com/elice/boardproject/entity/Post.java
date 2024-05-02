@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @AllArgsConstructor
@@ -41,6 +42,7 @@ public class Post {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @CreatedDate
     @Column(name = "created_at")
     private Timestamp created_at;
 

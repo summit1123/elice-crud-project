@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 @Getter
 @Setter
@@ -38,6 +39,7 @@ public class Comment {
     @JoinColumn(name = "postId", nullable = false)
     private Post post;
 
+    @CreatedDate
     @Column(name = "created_at")
     private Timestamp created_at;
 

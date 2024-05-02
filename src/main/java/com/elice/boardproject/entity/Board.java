@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +37,7 @@ public class Board {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @CreatedDate
     @Column(name = "created_at")
     private Timestamp created_at;
 

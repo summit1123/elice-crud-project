@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="UTF-8" />
   <link
@@ -46,6 +46,45 @@
   <title>게시판</title>
 </head>
 <body>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/}">Lovestargram</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/boards}">Boards</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link" th:href="@{/register}">Register</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link" th:href="@{/login}">Login</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-link nav-link">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" th:classappend="${!boardPage.hasPrevious()} ? 'disabled'">
+      <a class="page-link" th:href="@{/boards(page=${boardPage.number - 1}, size=${boardPage.size})}">Previous</a>
+    </li>
+    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, boardPage.totalPages - 1)}"
+        th:classappend="${pageNum == boardPage.number} ? 'active'">
+      <a class="page-link" th:href="@{/boards(page=${pageNum}, size=${boardPage.size})}" th:text="${pageNum + 1}"></a>
+    </li>
+    <li class="page-item" th:classappend="${!boardPage.hasNext()} ? 'disabled'">
+      <a class="page-link" th:href="@{/boards(page=${boardPage.number + 1}, size=${boardPage.size})}">Next</a>
+    </li>
+  </ul>
+</nav>
 <div class="container my-5">
   <div class="header mb-5">
     <h1 class="text-center">lovestargram</h1>

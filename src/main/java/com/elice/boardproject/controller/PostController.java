@@ -11,6 +11,7 @@ import com.elice.boardproject.entity.User;
 import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.PostService;
 import com.elice.boardproject.service.UserService;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,10 +53,15 @@ public class PostController {
 
 
     @GetMapping("/posts/create")
-    public String createPostForm(@RequestParam("boardId") int boardId, Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("boardId", boardId);
-        model.addAttribute("users", users);
+    public String createPostForm(@RequestParam("boardId") int boardId, Principal principal, Model model) {
+        if (principal != null) {
+            User currentUser = userService.getUserByUsername(principal.getName());
+            model.addAttribute("boardId", boardId);
+            model.addAttribute("currentUser", currentUser);
+        } else {
+            // 인증되지 않은 사용자에 대한 처리 로직 추가
+            return "redirect:/login";
+        }
         return "post/createPost";
     }
 

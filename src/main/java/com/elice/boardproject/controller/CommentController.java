@@ -22,10 +22,17 @@ public class CommentController {
     private final UserService userService;
 
     @PostMapping("/posts/{postId}/comments")
-    public String createComment(@PathVariable int postId, @ModelAttribute Comment comment) {
+    public String createComment(@PathVariable int postId, @ModelAttribute Comment comment, Principal principal) {
         try {
-            commentService.createComment(postId, comment);
-            return "redirect:/posts/" + postId;
+            if (principal != null) {
+                User currentUser = userService.getUserByUsername(principal.getName());
+                comment.setUser(currentUser);
+                commentService.createComment(postId, comment);
+                return "redirect:/posts/" + postId;
+            } else {
+                // 인증되지 않은 사용자에 대한 처리 로직 추가
+                return "redirect:/login";
+            }
         } catch (IllegalArgumentException e) {
             return "error/404";
         }

@@ -10,10 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    //Page<Post> findByBoard(Board board, Pageable pageable);
+    Page<Post> findByBoardAndTitleContainingOrContentContaining(Board board, String title, String content, Pageable pageable);
 
-    Page<Post> findByBoardAndTitleContainingOrContentContaining(Board board, String title,
-        String content, Pageable pageable);
-
-    //List<Post> findByBoardId(Integer boardId);
+    Page<Post> findByBoard(Board board, Pageable pageable);
 }

@@ -21,6 +21,15 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    public List<CommentDTO> getCommentDTOsByPost(int postId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid post id: " + postId));
+        List<Comment> comments = commentRepository.findByPost(post);
+        return comments.stream()
+            .map(CommentDTO::new)
+            .collect(Collectors.toList());
+    }
+
     @Transactional
     public Comment getCommentById(int commentId) {
         return commentRepository.findById(commentId)

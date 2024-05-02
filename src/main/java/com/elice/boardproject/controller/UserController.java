@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -20,5 +22,18 @@ public class UserController {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "user/users";
+    }
+
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "user/register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user) {
+        user.setRawPassword(user.getPassword()); // 평문 비밀번호 설정
+        userService.createUser(user);
+        return "redirect:/login";
     }
 }
