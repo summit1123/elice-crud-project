@@ -39,7 +39,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="post : ${board.posts}">
+    <tr th:each="post : ${post}">
       <td><a th:href="@{/posts/{postId}(postId=${post.post_id})}" th:text="${post.title}"></a></td>
       <td th:text="${post.user.username}"></td>
       <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>

@@ -23,6 +23,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
+    @Transactional
     public Board getBoardById(int boardId) {
         return boardRepository.findById(boardId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid board id: " + boardId));

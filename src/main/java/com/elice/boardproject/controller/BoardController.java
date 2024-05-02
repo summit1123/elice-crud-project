@@ -84,9 +84,9 @@ public class BoardController {
     @GetMapping("/boards/{boardId}")
     public String getBoardDetail(@PathVariable int boardId, Model model) {
         Board board = boardService.getBoardById(boardId);
-        List<Post> emptyBoardList = Collections.emptyList(); // 빈 리스트 생성
-        board.setPosts(emptyBoardList);
+        List<Post> posts = board.getPosts();
         model.addAttribute("board", board);
+        model.addAttribute("posts", posts);
         return "board/boardDetail";
     }
 }
