@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 public class PostController {
+
     private final PostService postService;
     private final CommentService commentService;
     private final UserService userService;
@@ -39,7 +40,8 @@ public class PostController {
             PostDTO postDTO = postService.getPostDTOById(postId);
             model.addAttribute("post", postDTO);
 
-            List<CommentDTO> commentDTOs = commentService.getCommentDTOsByPost(postService.getPostById(postId));
+            List<CommentDTO> commentDTOs = commentService.getCommentDTOsByPost(
+                postService.getPostById(postId));
             model.addAttribute("comments", commentDTOs);
 
             return "post/post";
@@ -51,9 +53,9 @@ public class PostController {
     }
 
 
-
     @GetMapping("/posts/create")
-    public String createPostForm(@RequestParam("boardId") int boardId, Principal principal, Model model) {
+    public String createPostForm(@RequestParam("boardId") int boardId, Principal principal,
+        Model model) {
         if (principal != null) {
             User currentUser = userService.getUserByUsername(principal.getName());
             model.addAttribute("boardId", boardId);
@@ -67,17 +69,20 @@ public class PostController {
 
 
     @PostMapping("/posts/create")
-    public String createPost(@RequestParam int boardId, @RequestParam("userId") int userId, @ModelAttribute Post post, Model model) {
+    public String createPost(@RequestParam int boardId, @ModelAttribute Post post,
+        Principal principal, Model model) {
         try {
-            User user = userService.getUserById(userId);
-            post.setUser(user);
-            postService.createPost(boardId, post);
-            return "redirect:/boards/" + boardId;
+            if (principal != null) {
+                User currentUser = userService.getUserByUsername(principal.getName());
+                post.setUser(currentUser);
+                postService.createPost(boardId, post);
+                return "redirect:/boards/" + boardId;
+            } else {
+                return "redirect:/login";
+            }
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("boardId", boardId);
-            List<User> users = userService.getAllUsers();
-            model.addAttribute("users", users);
             return "post/createPost";
         }
     }
@@ -97,10 +102,8 @@ public class PostController {
 
     @DeleteMapping("/posts/{postId}")
     public String deletePost(@PathVariable int postId) {
+        int boardId = postService.getPostById(postId).getBoard().getBoardId();
         postService.deletePost(postId);
-        return "redirect:/boards/" + postService.getPostById(postId).getBoard().getBoardId();
-
-
-
+        return "redirect:/boards/" + boardId;
     }
 }

@@ -25,7 +25,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/}">Lovestargram</a>
+    <a class="navbar-brand" th:href="@{/boards}">Lovestargram</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -60,12 +60,6 @@
     <div class="mb-3">
       <label for="content">내용</label>
       <textarea class="form-control" id="content" name="content" placeholder="내용 입력"></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="userId">작성자</label>
-      <select class="form-control" id="userId" name="userId" required>
-        <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
-      </select>
     </div>
     <button type="submit" class="btn btn-primary">업로드</button>
     <button

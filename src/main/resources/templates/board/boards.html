@@ -49,7 +49,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/}">Lovestargram</a>
+    <a class="navbar-brand" th:href="@{/boards}">Lovestargram</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -108,15 +108,9 @@
                   <span class="material-symbols-outlined">edit</span>
                 </button>
               </form>
-              <button
-                  class="btn btn-outline-danger lh-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#deleteModal"
-                  th:onclick="handleDeleteButton(event, [[${board.boardId}]]);"
-              >
-                <span class="material-symbols-outlined"> delete </span>
-              </button>
-
+              <form th:action="@{/boards/{boardId}(boardId=${board.boardId})}" th:method="delete" class="d-inline">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </div>
           </a>
         </div>

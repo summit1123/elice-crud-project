@@ -42,25 +42,19 @@ public class CommentController {
 
     @PostMapping("/comments/{commentId}/edit")
     public String updateComment(@PathVariable int commentId, @ModelAttribute Comment updatedComment) {
-        try {
-            commentService.updateComment(commentId, updatedComment);
-            int postId = commentService.getCommentById(commentId).getPost().getPostId();
-            return "redirect:/posts/" + postId;
-        } catch (IllegalArgumentException e) {
-            return "error/404";
-        }
+        commentService.updateComment(commentId, updatedComment);
+        int postId = commentService.getCommentById(commentId).getPost().getPostId();
+        return "redirect:/posts/" + postId;
     }
+
+
 
 
     @DeleteMapping("/comments/{commentId}")
     public String deleteComment(@PathVariable int commentId) {
-        try {
-            int postId = commentService.getCommentById(commentId).getPost().getPostId();
-            commentService.deleteComment(commentId);
-            return "redirect:/posts/" + postId;
-        } catch (IllegalArgumentException e) {
-            return "error/404";
-        }
+        int postId = commentService.getCommentById(commentId).getPost().getPostId();
+        commentService.deleteComment(commentId);
+        return "redirect:/posts/" + postId;
     }
 
 

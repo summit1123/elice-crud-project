@@ -47,6 +47,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    @Transactional
     public void deletePost(int postId) {
         if (!postRepository.existsById(postId)) {
             throw new PostNotFoundException("Post not found with id: " + postId);

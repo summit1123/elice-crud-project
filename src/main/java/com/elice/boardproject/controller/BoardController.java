@@ -36,6 +36,7 @@ public class BoardController {
     public String list(@PageableDefault(size = 10) Pageable pageable, Model model) {
         Page<Board> boardPage = boardService.getAllBoards(pageable);
         model.addAttribute("boardPage", boardPage);
+        model.addAttribute("boards", boardPage.getContent());
         return "board/boards";
     }
 
@@ -44,24 +45,27 @@ public class BoardController {
         if (principal != null) {
             User currentUser = userService.getUserByUsername(principal.getName());
             model.addAttribute("currentUser", currentUser);
+            return "board/createBoard";
         } else {
-            // 인증되지 않은 사용자에 대한 처리 로직 추가
             return "redirect:/login";
         }
-        return "board/createBoard";
     }
 
+
     @PostMapping("/boards/create")
-    public String createBoard(@ModelAttribute("board") Board board, @RequestParam("userId") int userId, Model model) {
+    public String createBoard(@ModelAttribute("board") Board board, Principal principal, Model model) {
         try {
-            User user = userService.getUserById(userId);
-            board.setUser(user);
-            boardService.createBoard(board);
-            return "redirect:/boards";
+            if (principal != null) {
+                User currentUser = userService.getUserByUsername(principal.getName());
+                board.setUser(currentUser);
+                Board createdBoard = boardService.createBoard(board);
+                return "redirect:/boards";
+            } else {
+                return "redirect:/login";
+            }
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", "존재하지 않는 사용자입니다.");
             model.addAttribute("board", board);
-            model.addAttribute("users", userService.getAllUsers());
             return "board/createBoard";
         }
     }
@@ -89,13 +93,14 @@ public class BoardController {
     }
 
 
-    @DeleteMapping("/boards/{boardId}/delete")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteBoard(@PathVariable int boardId) {
+    @DeleteMapping("/boards/{boardId}")
+    public String deleteBoard(@PathVariable int boardId) {
         boardService.deleteBoard(boardId);
+        return "redirect:/boards";
     }
 
 
+    @Transactional
     @GetMapping("/boards/{boardId}")
     public String getBoardDetail(@PathVariable int boardId, Model model) {
         Board board = boardService.getBoardById(boardId);

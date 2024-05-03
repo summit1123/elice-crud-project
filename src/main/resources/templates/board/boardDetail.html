@@ -25,7 +25,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/}">Lovestargram</a>
+    <a class="navbar-brand" th:href="@{/boards}">Lovestargram</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -52,7 +52,7 @@
     <h1 class="text-center" th:text="${board.boardName}"></h1>
     <p class="text-center" th:text="${board.description}"></p>
   </div>
-  <div class="d-flex justify-content-end mb-3">
+  <div class="d-flex justify-content-end mb-3" sec:authorize="isAuthenticated()">
     <a th:href="@{/posts/create(boardId=${board.boardId})}" class="btn btn-primary">게시글 추가</a>
   </div>
   <table class="table">

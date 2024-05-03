@@ -34,6 +34,12 @@ public class UserController {
     public String registerUser(@ModelAttribute("user") User user) {
         user.setRawPassword(user.getPassword()); // 평문 비밀번호 설정
         userService.createUser(user);
-        return "redirect:/login";
+        return "redirect:/boards";
+
+    }
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "user/login";
     }
 }

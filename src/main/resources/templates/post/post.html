@@ -41,7 +41,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/}">Lovestargram</a>
+    <a class="navbar-brand" th:href="@{/boards}">Lovestargram</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -93,10 +93,6 @@
       <!-- 댓글 출력 부분 -->
     </div>
     <span th:if="${#lists.isEmpty(comments)}" class="d-block w-100 text-center">댓글이 없습니다.</span>
-          class="card comment"
-          style="min-width: 30%"
-          th:each="comment : ${comments}"
-      >
     <div class="card comment" style="min-width: 30%" th:each="comment : ${comments}">
       <div class="card-body position-relative">
         <p class="mb-2" th:text="${comment.content}">댓글 내용</p>
@@ -105,36 +101,21 @@
              class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
              role="group"
              aria-label="edit-delete">
-          <!-- 수정/삭제 버튼 -->
-        </div>
-      </div>
-    </div>
-            <button
-                class="btn btn-outline-primary lh-1"
-                data-bs-toggle="modal"
-                data-bs-target="#editCommentModal"
-                th:onclick="handleEditCommentButton(event, [[${comment?.commentId}]], [[${comment?.content}]])">
+          <form th:action="@{/comments/{commentId}/edit(commentId=${comment.commentId})}" method="post" class="d-inline">
+            <input type="hidden" name="content" th:value="${comment.content}" />
+            <button type="submit" class="btn btn-outline-primary lh-1">
               <span class="material-symbols-outlined"> edit </span>
             </button>
-            <form th:action="@{/comments/{commentId}(commentId=${comment?.commentId})}" method="post" class="d-inline">
-              <input type="hidden" name="_method" value="delete" />
-              <button
-                  class="btn btn-outline-danger lh-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#deleteCommentModal"
-                  th:onclick="handleDeleteCommentButton(event, [[${comment.commentId}]])">
-                <span class="material-symbols-outlined"> delete </span>
-              </button>
-            </form>
-          </div>
+          </form>
+          <form th:action="@{/comments/{commentId}(commentId=${comment.commentId})}" method="post" class="d-inline">
+            <input type="hidden" name="_method" value="delete" />
+            <button type="submit" class="btn btn-outline-danger lh-1">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
-    <span
-        th:if="${#lists.isEmpty(comments)}"
-        class="d-block w-100 text-center"
-    >댓글이 없습니다.</span
-    >
 
     <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
       <div class="mb-3">
@@ -162,146 +143,14 @@
           </button>
         </li>
         <li>
-          <button
-              class="btn btn-outline-danger lh-1"
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteCommentModal"
-              th:onclick="handleDeleteCommentButton(event, [[${comment.commentId}]])">
-            <span class="material-symbols-outlined"> delete </span>
-          </button>
+          <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post" class="d-inline">
+            <input type="hidden" name="_method" value="delete" />
+            <button type="submit" class="btn btn-outline-danger lh-1">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </form>
         </li>
       </ul>
-    </div>
-  </div>
-</div>
-
-<div
-    class="modal fade"
-    id="deletePostModal"
-    tabindex="-1"
-    aria-labelledby="deletePostModalLabel"
-    aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="deletePostModalLabel">
-          게시글을 삭제하시겠습니까?
-        </h1>
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <p class="fw-light">게시글과 댓글이 삭제됩니다.</p>
-      </div>
-      <div class="modal-footer">
-        <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-        >
-          취소
-        </button>
-        <button
-            type="button"
-            class="btn btn-danger"
-            onclick="handleDeletePostModalButton()"
-        >
-          삭제
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div
-    class="modal fade"
-    id="editCommentModal"
-    tabindex="-1"
-    aria-labelledby="editCommentModalLabel"
-    aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="editCommentModalLabel">
-          댓글 수정하기
-        </h1>
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-        ></button>
-      </div>
-      <form id="commentEditForm" th:action="@{/comments/{commentId}/edit(commentId=${currentComment})}" method= "POST">
-        <div class="modal-body">
-              <textarea
-                  class="form-control"
-                  name="content"
-                  id="commentContentTextarea"
-                  placeholder="댓글 수정하기..."
-              ></textarea>
-        </div>
-        <div class="modal-footer">
-          <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-          >
-            취소
-          </button>
-          <button class="btn btn-primary">수정</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div
-    class="modal fade"
-    id="deleteCommentModal"
-    tabindex="-1"
-    aria-labelledby="deleteCommentModalLabel"
-    aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="deleteCommentModalLabel">
-          댓글을 삭제하시겠습니까?
-        </h1>
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <p class="fw-light">해당 댓글이 삭제됩니다.</p>
-      </div>
-      <div class="modal-footer">
-        <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-        >
-          취소
-        </button>
-        <button
-            type="button"
-            class="btn btn-danger"
-            onclick="handleDeleteCommentModalButton()"
-        >
-          삭제
-        </button>
-      </div>
     </div>
   </div>
 </div>
@@ -312,68 +161,5 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"
 ></script>
-<script th:inline="javascript">
-  let currentPost;
-  let currentBoard;
-  let currentComment;
-  let elementToDelete;
-
-  function handleEditCommentButton(e, commentId, content) {
-    e.preventDefault();
-    currentComment = commentId;
-    document.getElementById("commentContentTextarea").value = content;
-    document.getElementById("commentEditForm").action = `/comments/${commentId}/edit`;
-  }
-
-
-  function handleDeletePostModalButton() {
-        fetch(`/posts/${currentPost}`, {
-            method: "DELETE",
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            window.location.href = `/boards/${currentBoard}`;
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('게시글 삭제 중 오류가 발생했습니다.');
-        });
-    }
-  function handleDeletePostButton(_, postId, boardId) {
-    currentPost = postId;
-    currentBoard = boardId;
-  }
-
-  function handleDeleteCommentButton(e, commentId) {
-    currentComment = commentId;
-    elementToDelete = e.target.closest(".card");
-  }
-
-  function handleDeleteCommentModalButton() {
-  fetch(`/comments/${currentComment}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "_method=delete",
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    elementToDelete.remove();
-    const commentsCount = document.getElementById("commentsCount");
-    commentsCount.innerText = parseInt(commentsCount.innerText) - 1;
-    const modal = bootstrap.Modal.getInstance("#deleteCommentModal");
-    modal.hide();
-  })
-  .catch(error => {
-    console.error('There was a problem with the fetch operation:', error);
-    alert('댓글 삭제 중 오류가 발생했습니다.');
-  });
-}
-</script>
 </body>
 </html>
