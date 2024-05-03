@@ -17,6 +17,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 
 @Getter
@@ -34,6 +36,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
+    @Fetch(FetchMode.JOIN)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

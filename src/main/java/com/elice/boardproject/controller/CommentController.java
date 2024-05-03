@@ -7,6 +7,7 @@ import com.elice.boardproject.service.CommentService;
 import com.elice.boardproject.service.UserService;
 import jakarta.transaction.Transactional;
 import java.security.Principal;
+import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,7 @@ public class CommentController {
                 User currentUser = userService.getUserByUsername(principal.getName());
                 comment.setUser(currentUser);
                 commentService.createComment(postId, comment);
+                comment.setCreated_at(new Timestamp(System.currentTimeMillis()));
                 return "redirect:/posts/" + postId;
             } else {
                 // 인증되지 않은 사용자에 대한 처리 로직 추가
@@ -40,12 +42,26 @@ public class CommentController {
 
 
 
+    @Transactional
     @PostMapping("/comments/{commentId}/edit")
-    public String updateComment(@PathVariable int commentId, @ModelAttribute Comment updatedComment) {
-        commentService.updateComment(commentId, updatedComment);
-        int postId = commentService.getCommentById(commentId).getPost().getPostId();
-        return "redirect:/posts/" + postId;
+    public String updateComment(@PathVariable int commentId, @ModelAttribute("updatedComment") Comment updatedComment, Principal principal) {
+        try {
+            Comment comment = commentService.getCommentById(commentId);
+            if (principal != null && principal.getName().equals(comment.getUser().getUsername())) {
+                updatedComment.setUser(comment.getUser()); // 기존 댓글 작성자 정보 유지
+                updatedComment.setPost(comment.getPost());
+                updatedComment.setCreated_at(comment.getCreated_at());
+                commentService.updateComment(commentId, updatedComment);
+                return "redirect:/posts/" + comment.getPost().getPostId();
+            } else {
+                // 인증되지 않은 사용자 또는 댓글 작성자가 아닌 경우 처리
+                return "error/403";
+            }
+        } catch (IllegalArgumentException e) {
+            return "error/404";
+        }
     }
+
 
 
 

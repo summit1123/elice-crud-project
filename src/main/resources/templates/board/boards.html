@@ -113,7 +113,7 @@
       <div class="col mb-3" th:unless="${#lists.isEmpty(boards)}" th:each="board : ${boards}">
         <div class="card" onmouseover="event.currentTarget.classList.add('shadow')" onmouseleave="event.currentTarget.classList.remove('shadow')">
           <a class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex" th:href="@{/boards/{boardId}(boardId=${board.boardId})}">
-            <img class="img-thumbnail w-50 h-50 me-3" src="hellobit.png" alt="hellobit" />
+            <img class="img-thumbnail w-50 h-50 me-3" src="love.png" alt="love" />
             <div>
               <h4 class="card-title fw-bold text-dark" th:text="${board.boardName}">게시판 이름</h4>
               <span class="card-text text-secondary text-wrap" th:text="${board.description}">게시판 설명</span>

@@ -92,8 +92,6 @@
     </form>
   </div>
   <div sec:authorize="isAnonymous() or #board.user.username != #authentication.principal.username">
-    <p>게시판을 수정할 권한이 없습니다.</p>
-    <a th:href="@{/boards}" class="btn btn-secondary">게시판 목록으로 돌아가기</a>
   </div>
 </div>
 
