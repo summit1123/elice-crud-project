@@ -42,6 +42,16 @@
     .board-item:hover > .btn-group {
       display: flex;
     }
+
+    body {
+  background-color: #ffe6e6;
+}
+
+    .text-container {
+  color: #d24d7a;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
   </style>
   <title>게시판</title>
 </head>
@@ -49,12 +59,9 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/boards}">Lovestargram</a>
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/boards}">Boards</a>
-        </li>
+    <a class="navbar-brand" th:href="@{/boards}" style="color: red;">Datespot</a>
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav">
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="@{/register}">Register</a>
         </li>
@@ -87,7 +94,16 @@
 </nav>
 <div class="container my-5">
   <div class="header mb-5">
-    <h1 class="text-center">lovestargram</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="text-container">
+          <h3 class="mb-3">맛집 추천!</h3>
+          <h3 class="mb-3">데이트 코스!</h3>
+          <h3>우리의 이야기를 시작해봐요!</h3>
+        </div>
+      </div>
+      <div class="col-md-6">
+    <h1 class="text-center">Datespot</h1>
   </div>
   <div class="d-flex justify-content-end mb-3">
     <a th:href="@{/boards/create}" class="btn btn-primary">게시판 추가</a>
