@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link href="https://font.elice.io/css?family=Elice+DX+Neolli" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="style.css" />
+  <title>댓글 수정</title>
+</head>
+<style>
+  body {
+background-color: #ffe6e6;
+}
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/boards}" style="color: red;">Datespot</a>
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav">
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link" th:href="@{/register}">Register</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link" th:href="@{/login}">Login</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-link nav-link">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <div class="header mb-5">
+    <h1 class="text-center">댓글 수정</h1>
+  </div>
+  <div th:if="${comment != null && currentUser != null && comment.user.userId == currentUser.userId}">
+    <form th:action="@{/comments/{commentId}/edit(commentId=${comment.commentId})}" method="post">
+      <div class="mb-3">
+        <label for="content">내용</label>
+        <textarea class="form-control" id="content" name="content" th:text="${comment.content}" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">수정</button>
+      <button type="button" class="btn btn-secondary" th:href="@{/posts/{postId}(postId=${comment.post.postId})}">취소</button>
+    </form>
+    <form th:action="@{/comments/{commentId}(commentId=${comment.commentId})}" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?')">
+      <input type="hidden" name="_method" value="delete" />
+      <button type="submit" class="btn btn-danger">삭제</button>
+    </form>
+  </div>
+  <div th:unless="${comment != null && currentUser != null && comment.user.userId == currentUser.userId}">
+    <p>댓글을 수정할 수 없습니다.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
