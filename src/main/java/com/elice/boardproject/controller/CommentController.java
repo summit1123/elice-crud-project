@@ -9,12 +9,16 @@ import jakarta.transaction.Transactional;
 import java.security.Principal;
 import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,29 +46,42 @@ public class CommentController {
 
 
 
-    @Transactional
     @PostMapping("/comments/{commentId}/edit")
-    public String updateComment(@PathVariable int commentId, @ModelAttribute("updatedComment") Comment updatedComment, Principal principal) {
+    public String updateComment(@PathVariable int commentId, @ModelAttribute("updatedComment") Comment updatedComment, Principal principal, RedirectAttributes redirectAttributes) {
         try {
             Comment comment = commentService.getCommentById(commentId);
-            if (principal != null && principal.getName().equals(comment.getUser().getUsername())) {
-                updatedComment.setUser(comment.getUser()); // 기존 댓글 작성자 정보 유지
+            String username = principal.getName();
+            com.elice.boardproject.entity.User user = userService.getUserByUsername(username);
+
+            if (user != null && comment.getUser().getUserId() == user.getUserId()) {
+                updatedComment.setUser(comment.getUser());
                 updatedComment.setPost(comment.getPost());
                 updatedComment.setCreated_at(comment.getCreated_at());
                 commentService.updateComment(commentId, updatedComment);
                 return "redirect:/posts/" + comment.getPost().getPostId();
             } else {
-                // 인증되지 않은 사용자 또는 댓글 작성자가 아닌 경우 처리
-                return "error/403";
+                redirectAttributes.addFlashAttribute("errorMessage", "댓글을 수정할 권한이 없습니다.");
+                return "redirect:/posts/" + comment.getPost().getPostId();
             }
         } catch (IllegalArgumentException e) {
-            return "error/404";
+            redirectAttributes.addFlashAttribute("errorMessage", "잘못된 요청입니다.");
+            return "redirect:/posts/" + commentService.getCommentById(commentId).getPost().getPostId();
         }
     }
 
+    @GetMapping("/comments/{commentId}/edit")
+    public String editCommentForm(@PathVariable int commentId, Model model, Principal principal) {
+        Comment comment = commentService.getCommentById(commentId);
+        model.addAttribute("comment", comment);
 
+        if (principal != null) {
+            String username = principal.getName();
+            com.elice.boardproject.entity.User user = userService.getUserByUsername(username);
+            model.addAttribute("currentUser", user);
+        }
 
-
+        return "post/editComment";
+    }
 
     @DeleteMapping("/comments/{commentId}")
     public String deleteComment(@PathVariable int commentId) {

@@ -92,39 +92,42 @@
       >
     </h4>
     <div class="container p-0 d-flex flex-column align-items-start gap-2" th:if="${not #lists.isEmpty(comments)}">
-      <!-- 댓글 출력 부분 -->
-    </div>
-    <span th:if="${#lists.isEmpty(comments)}" class="d-block w-100 text-center">댓글이 없습니다.</span>
-    <div class="card comment" style="min-width: 30%" th:each="comment : ${comments}">
-      <div class="card-body position-relative">
-        <p class="mb-2" th:text="${comment.content}">댓글 내용</p>
-        <small class="text-secondary" th:text="${#dates.format(comment.created_at, 'yyyy-MM-dd HH:mm')}"></small>
-        <div th:if="${comment != null && comment.userId == post.user.userId}"
-             class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
-             role="group"
-             aria-label="edit-delete">
-          <form th:action="@{/comments/{commentId}/edit(commentId=${comment.commentId})}" method="post" class="d-inline">
-            <input type="hidden" name="content" th:value="${comment.content}" />
-            <button type="submit" class="btn btn-outline-primary lh-1">
-              <span class="material-symbols-outlined"> edit </span>
-            </button>
-          </form>
-          <form th:action="@{/comments/{commentId}(commentId=${comment.commentId})}" method="post" class="d-inline">
-            <input type="hidden" name="_method" value="delete" />
-            <button type="submit" class="btn btn-outline-danger lh-1">
-              <span class="material-symbols-outlined"> delete </span>
-            </button>
-          </form>
+      <div class="card comment" style="min-width: 30%" th:each="comment : ${comments}">
+        <div class="card-body position-relative">
+          <p class="mb-2" th:text="${comment.content}">댓글 내용</p>
+          <small class="text-secondary" th:text="${comment.username}">작성자</small>
+          <small class="text-secondary" th:text="${#dates.format(comment.created_at, 'yyyy-MM-dd HH:mm')}">생성일자</small>
+          <div th:if="${comment != null && comment.userId == post.user.userId}"
+               class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
+               role="group"
+               aria-label="edit-delete">
+            <form th:action="@{/comments/{commentId}/edit(commentId=${comment.commentId})}" method="get" class="d-inline">
+              <button type="submit" class="btn btn-outline-primary lh-1">
+                <span class="material-symbols-outlined"> edit </span>
+              </button>
+            </form>
+            <form th:action="@{/comments/{commentId}(commentId=${comment.commentId})}" method="post" class="d-inline">
+              <input type="hidden" name="_method" value="delete" />
+              <button type="submit" class="btn btn-outline-danger lh-1">
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
+    <span th:if="${#lists.isEmpty(comments)}" class="d-block w-100 text-center">댓글이 없습니다.</span>
+    </div>
 
     <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
+      <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <p th:text="${errorMessage}"></p>
+      </div>
       <div class="mb-3">
         <label for="content">댓글 내용</label>
         <textarea class="form-control" id="content" name="content" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">댓글 작성</button>
+      <button type="submit" class="btn btn-primary" style="background-color: #B0C4DE; border-color: #B0C4DE;">댓글 작성</button>
     </form>
     <div class="position-absolute top-0 end-0 mt-4 me-4">
       <button
@@ -137,12 +140,9 @@
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <li>
-          <button
-              class="dropdown-item d-flex align-items-center gap-2"
-              th:onclick="'location.href=\'/posts/' + ${post.postId} + '/edit\''"
-          >
+          <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/posts/{postId}/edit(postId=${post.postId})}">
             <span class="material-symbols-outlined"> edit </span>수정
-          </button>
+          </a>
         </li>
         <li>
           <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post" class="d-inline">

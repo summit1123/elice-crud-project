@@ -55,7 +55,7 @@
     <p class="text-center" th:text="${board.description}"></p>
   </div>
   <div class="d-flex justify-content-end mb-3" sec:authorize="isAuthenticated()">
-    <a th:href="@{/posts/create(boardId=${board.boardId})}" class="btn btn-primary">게시글 추가</a>
+    <a th:href="@{/posts/create(boardId=${board.boardId})}" class="btn btn-primary" style="background-color: #7CB9E8; border-color: #7CB9E8;">게시글 추가</a>
   </div>
   <table class="table">
     <thead>
